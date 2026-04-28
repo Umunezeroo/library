@@ -1,57 +1,129 @@
 import express from "express";
-import { db } from "./config/sqlite.js";
-// import { connectToDb } from './config/db.js';
+import { db } from "./config/db.js";
+import sqlite3 from "sqlite3";
 import cors from "cors";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const uploadsDir = path.join(__dirname, "uploads");
+
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, uploadsDir),
+  filename: (req, file, cb) => {
+    const uniqueName = `${Date.now()}-${file.originalname.replace(/\s+/g, "-")}`;
+    cb(null, uniqueName);
+  },
+});
+
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if (!file.mimetype.startsWith("image/")) {
+      return cb(new Error("Only image files are allowed"));
+    }
+    cb(null, true);
+  },
+});
 
 const PORT = 3000;
 const app = express();
-
-app.use(cors({
-  origin:["http://127.0.0.1:5500"],
-  methods:["GET","POST","PUT","DELETE"],
-  allowedHeaders:["Content-Type"]
-}))
 app.use(express.json());
-// connectToDb()
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type"],
+  }),
+);
+app.use("/uploads", express.static(uploadsDir));
+
+app.post("/api/upload", upload.single("image"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "No image file uploaded" });
+  }
+
+  const imageUrl = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+  return res.status(201).json({ imageUrl });
+});
 
 app.post("/api/books", (req, res) => {
-  console.log(req.body);
-  
   const { name, description, author, price, imageSrc } = req.body;
-  if (!name || !description || !author || !price) {
-    return res.status(400).json({ message: "All fields are required" });
+  if (!name || !description || !author || !price || !imageSrc) {
+    console.log("all fields are required");
+    return res.status(400).json({ message: "all fields are required" });
   }
-  const query = `INSERT INTO books (name, description, author, price,imageSrc) VALUES (?, ?, ?, ?,?)`;
-  db.run(query, [name, description, author, price, imageSrc || ""], (err) => {
+
+  const query = `INSERT INTO books (name, description, author, price, imageSrc) VALUES (?, ?, ?, ?, ?)`;
+  db.run(query, [name, description, author, price, imageSrc], (err) => {
     if (err) {
-      return console.log("error in creating books", err);
+      console.log("error in creating book", err);
+      return res.status(500).json({ message: "error in creating book" });
     }
-    console.log("inserted books in db successfully.");
-    return res.status(201).json({ message: "Created successfully" })
+
+    return res.status(201).json({ message: "book created successfully" });
   });
 });
 
 app.get("/api/books", (req, res) => {
   const query = `SELECT * FROM books`;
+
   db.all(query, [], (err, rows) => {
     if (err) {
-      return console.log("error in fetching books", err);
+      console.log("error in getting data");
     }
     return res.status(200).json(rows);
   });
 });
 
-app.delete("/api/books/:id", (req, res) => {
+app.put("/api/books/:id", (req, res) => {
   const { id } = req.params;
-  const query = `DELETE FROM books WHERE id = ?`;
-  db.run(query, [id], (err) => {
+  const { name, description, author, price, imageSrc } = req.body;
+const query = `UPDATE books SET name = ?, description = ?, author = ?, price = ?, imageSrc = ? WHERE id = ?`;
+
+  db.run(query, [name, description, author, price, imageSrc, id], (err) => {
     if (err) {
-      return res.status(500).json({ message: "Error deleting book", error: err });
+      console.log("error in updating book");
+      return res.status(500).json({
+        message: "error in updating book",
+      });
     }
-    return res.status(200).json({ message: "Book deleted successfully" });
+    return res.status(200).json({
+      message: "book updated successfully",
+    });
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`server is running on http://localhost:${PORT}`);
-});
+
+app.delete("/api/books/:id", (req, res) => {
+  const { id } = req.params;
+
+  if (!id) return;
+
+  const query = `DELETE FROM books WHERE id = ?`;
+
+  db.run(query, [id], (err) => {
+    if (err) {
+      console.log("something went wrong while deleting book");
+      return res.status(500).json({
+        message: "something went wrong while deleting book",
+      });
+    }
+
+    return res.status(200).json({
+      message:'deleted book successfully'
+    })
+
+    });
+  });
+
+  app.listen(PORT, () => {
+    console.log(`server is running on http://localhost:${PORT}`);
+  });
