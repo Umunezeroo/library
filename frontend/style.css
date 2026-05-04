@@ -1,0 +1,477 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Lora:wght@400;500;600&display=swap');
+
+:root {
+    --primary-color: #1e3a5f;
+    --secondary-color: #2d5a8c;
+    --accent-color: #d4a574;
+    --text-dark: #2c3e50;
+    --text-light: #7f8c8d;
+    --bg-light: #f8f9fa;
+    --bg-white: #ffffff;
+    --border-color: #e0e6ed;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 10px 32px rgba(0, 0, 0, 0.16);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    overflow: hidden;
+}
+
+/* ===================== HEADER ===================== */
+.header {
+    background-color: var(--bg-white);
+    border-bottom: 2px solid var(--border-color);
+    padding: 16px 20px;
+    box-shadow: var(--shadow-sm);
+}
+
+#navbar {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.logo:hover {
+    transform: translateY(-2px);
+}
+
+.logo img {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    object-fit: cover;
+}
+
+.logoTitle {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-color);
+    letter-spacing: -0.5px;
+}
+
+/* ===================== SEARCH BOX ===================== */
+.searchBox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background-color: var(--bg-light);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    flex: 1;
+    max-width: 400px;
+    transition: var(--transition);
+}
+
+.searchBox:focus-within {
+    border-color: var(--accent-color);
+    box-shadow: var(--shadow-md);
+    background-color: var(--bg-white);
+}
+
+.searchBox input {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    width: 100%;
+    font-size: 14px;
+    color: var(--text-dark);
+    font-family: inherit;
+}
+
+.searchBox input::placeholder {
+    color: var(--text-light);
+}
+
+/* ===================== USER BUTTON AREA ===================== */
+.userBtn {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.userBtn svg {
+    width: 20px;
+    height: 20px;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.userBtn svg:hover {
+    color: var(--accent-color);
+    transform: scale(1.1);
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-left: 16px;
+    border-left: 2px solid var(--border-color);
+}
+#user-icon{
+    display: none;
+}
+
+#signInBtn{
+    display: flex;
+    background-color: var(--primary-color);
+    padding: 8px 12px;
+    color: white;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 15px;
+}
+#signInBtn:hover{
+    background-color: var(--primary-color);
+    padding: 8px 12px;
+    color: white;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.profile svg {
+    width: 24px;
+    height: 24px;
+    color: var(--text-dark);
+}
+
+.profile p {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+/* ===================== MAIN LAYOUT ===================== */
+.mainContent {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100vw;
+    height: calc(100vh - 80px);
+    gap: 0;
+    position: relative;
+}
+
+/* ===================== SIDEBAR ===================== */
+.sidebar {
+    width: 260px;
+    height: 100%;
+    background-color: var(--primary-color);
+    padding: 24px 0;
+    overflow-y: auto;
+    box-shadow: var(--shadow-md);
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar li {
+    margin-bottom: 8px;
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: var(--transition);
+    border-left: 3px solid transparent;
+}
+
+.sidebar a:hover {
+    color: var(--accent-color);
+    background-color: rgba(255, 255, 255, 0.1);
+    border-left-color: var(--accent-color);
+    padding-left: 21px;
+}
+
+/* ===================== BOOK SECTION ===================== */
+.bookSection {
+    flex: 1;
+    background-color: var(--bg-light);
+    padding: 32px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.bookSection > div:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.bookSection h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-color);
+    letter-spacing: -0.5px;
+}
+
+.bookSection a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.bookSection a:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+}
+
+/* ===================== BOOK GRID ===================== */
+#book-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+    padding-top: 8px;
+}
+
+.book-element {
+    background-color: var(--bg-white);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid var(--border-color);
+}
+
+.book-element:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent-color);
+}
+
+/* ===================== BOOK IMAGE ===================== */
+#book-container img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    background: linear-gradient(135deg, #e8e8e8 0%, #f5f5f5 100%);
+    transition: var(--transition);
+}
+
+.book-element:hover img {
+    transform: scale(1.05);
+}
+
+/* ===================== BOOK INFO ===================== */
+.book-element > div {
+    padding: 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.book-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-transform: capitalize;
+    margin-bottom: 8px;
+    line-height: 1.4;
+    min-height: 32px;
+}
+
+.book-author {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent-color);
+    text-transform: capitalize;
+    margin-bottom: 10px;
+    letter-spacing: 0.3px;
+}
+
+.book-desc {
+    font-size: 12px;
+    color: var(--text-light);
+    font-weight: 400;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.book-price {
+    
+    color: var(--primary-color);
+    text-transform: none;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+    /* background-color: red; */
+    text-align: right;
+}
+
+.book-span-price {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* ===================== UTILITY CLASSES ===================== */
+.nav-link {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 4px;
+}
+
+.iconBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.iconBox svg {
+    height: 20px;
+    width: 20px;
+}
+
+section {
+    background-color: transparent;
+}
+
+/* ===================== SCROLLBAR ===================== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-light);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
+}
+
+/* ===================== RESPONSIVE DESIGN ===================== */
+@media (max-width: 1200px) {
+    #book-container {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .mainContent {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        padding: 12px 0;
+    }
+
+    .bookSection {
+        height: auto;
+        padding: 20px;
+    }
+
+    #book-container {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 16px;
+    }
+
+    #navbar {
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .searchBox {
+        max-width: 100%;
+        flex: 0 1 auto;
+    }
+}
+
+.user-profile:hover{
+    cursor: pointer;
+}
+.user-profile{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+.user-name{
+    font-size: 14px;
+    font-weight:bold;
+text-transform: capitalize;
+}
+.user-btn:hover{
+    cursor: pointer;
+}
+.user-btn{
+    width: 200px;
+    background-color: white;
+    border: 1px solid green;
+    display: none;
+    border-radius: 10px;
+    justify-content: center;
+    height: 100px;
+    top: 0px;
+    cursor:pointer;
+    right: 2px;
+    position: absolute;
+}
+
+.log-out{
+    display: flex;
+    background-color: red;
+    padding: 8px 12px;
+    color: white;
+    cursor: pointer;
+
+}
