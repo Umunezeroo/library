@@ -5,9 +5,10 @@ const bookCard = document.getElementsByClassName('book-card')
 const profile = document.getElementById('profile')
 const userIcon = document.getElementById('user-icon')
 const signInBtn = document.getElementById('signInBtn')
-const logOutBtn = document.getElementById('logOutBtn')
+const signOutBtn = document.getElementById('signOutBtn')
 const userBtn = document.querySelector('.user-btn');
 const searchInput = document.getElementById('search-input');
+const categoryContainer = document.querySelector('.category');
 
 searchInput.addEventListener('keydown', async (e) => {
 
@@ -20,6 +21,12 @@ e.preventDefault();
 
 
     }
+});
+
+// Sign Out Functionality
+signOutBtn.addEventListener('click', () => {
+    window.localStorage.removeItem('userSession');
+    window.location.href = '/frontend/sign-in/sign-in.html';
 });
 
 
@@ -163,4 +170,42 @@ function displayNavLinks() {
 displayBooks()
 
 displayNavLinks()
-// bookCard.addEventListener('click',viewBook(book.id))
+
+async function displayCategories() {
+    try {
+        const response = await fetch('http://localhost:3000/api/categories');
+        const categories = await response.json();
+        
+        // Clear existing category content
+        categoryContainer.innerHTML = '';
+        
+        if (categories.length === 0) {
+            categoryContainer.innerHTML = '<p style="text-align: center; width: 100%;">No categories available</p>';
+            return;
+        }
+        
+        categories.forEach((category) => {
+            const categoryItem = document.createElement('div');
+            categoryItem.className = 'category-item';
+            categoryItem.style.cursor = 'pointer';
+            categoryItem.style.textAlign = 'center';
+            categoryItem.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folder">
+                    <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>
+                </svg>
+                <p style="margin: 5px 0 0 0; font-size: 14px;">${category.name}</p>
+            `;
+            
+            categoryItem.addEventListener('click', () => {
+                window.location.href = `/frontend/books/category-view.html?${category.id}`;
+            });
+            
+            categoryContainer.appendChild(categoryItem);
+        });
+    } catch (error) {
+        console.error('Error loading categories:', error);
+    }
+}
+
+displayCategories();
+window.displayUserBtn = displayUserBtn;

@@ -12,24 +12,30 @@ export const db = new sqlite.Database(dbPath, (err) => {
     }else{
         console.log('connected susseccfully');
 
+        db.run(`CREATE TABLE IF NOT EXISTS categories (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL UNIQUE,
+            description TEXT
+        )`);
+
         db.run(`CREATE TABLE IF NOT EXISTS books (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             description TEXT NOT NULL,
             author TEXT NOT NULL,
             price REAL NOT NULL,
-            imageSrc TEXT NOT NULL
+            imageSrc TEXT NOT NULL,
+            categoryId INTEGER,
+            FOREIGN KEY (categoryId) REFERENCES categories(id)
         )`);
 
-
-
-        
         db.run(`CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT NOT NULL,
             email TEXT NOT NULL,
             password TEXT NOT NULL,
-            profile TEXT
+            profile TEXT,
+            role TEXT DEFAULT 'user'
         )`);
     }
 });

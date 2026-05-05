@@ -19,6 +19,7 @@
         <ul class="navlink">
           <li class="link"><a href="/frontend/index.html">Home</a></li>
           <li class="link"><a href="#" id="add-book-btn">Add books</a></li>
+          <li class="link"><a href="#" id="manage-categories-btn">Manage Categories</a></li>
           <li class="link"><a href="#">Settings</a></li>
         </ul>
       </nav>
@@ -48,6 +49,12 @@
               <input type="number" id="price" name="price" step="0.01" />
             </div>
             <div class="form-input">
+              <label for="category">Category: </label>
+              <select id="category" name="category">
+                <option value="">Select a category</option>
+              </select>
+            </div>
+            <div class="form-input">
               <label for="image">image: </label>
               <input type="file"  id="image" name="image" />
             </div>
@@ -57,6 +64,36 @@
               </button>
             </div>
           </form>
+        </div>
+      </div>
+
+      <!-- Category Management Modal -->
+      <div class="modal" id="category-modal">
+        <div class="modal-content">
+          <div class="modal-title">
+            <h2 class="form-title">Manage Categories</h2>
+            <button type="button" id="close-category-modal">x</button>
+          </div>
+          <div class="category-manager">
+            <div class="add-category-form">
+              <h3>Add New Category</h3>
+              <form id="add-category-form">
+                <div class="form-input">
+                  <label for="category-name">Category Name:</label>
+                  <input type="text" id="category-name" name="name" required />
+                </div>
+                <div class="form-input">
+                  <label for="category-description">Description:</label>
+                  <textarea id="category-description" name="description" rows="3"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Add Category</button>
+              </form>
+            </div>
+            <div class="categories-list">
+              <h3>Existing Categories</h3>
+              <div id="categories-container"></div>
+            </div>
+          </div>
         </div>
       </div>
 

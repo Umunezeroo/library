@@ -12,6 +12,7 @@ app.use(
     origin: "http://127.0.0.1:5500",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type"],
+      credentials: true,
   }),
 );
 
@@ -106,16 +107,14 @@ app.get("/api/auth", (req, res) => {
 });
 
 app.post("/api/books", (req, res) => {
-  const { name, description, author, price, imageSrc } = req.body;
+  const { name, description, author, price, imageSrc, categoryId } = req.body;
   if (!name || !description || !author || !price || !imageSrc) {
     console.log("all fields are riquired");
     return res.status(400).json("all fields are riquired");
   }
 
-  const query = `INSERT INTO books (name, description, author, price, imageSrc) VALUES(?,?,?,?,?
-    
-    )`;
-  db.run(query, [name, description, author, price, imageSrc], (err) => {
+  const query = `INSERT INTO books (name, description, author, price, imageSrc, categoryId) VALUES(?,?,?,?,?,?)`;
+  db.run(query, [name, description, author, price, imageSrc, categoryId || null], (err) => {
     if (err) {
       return console.log("error in creating book", err);
     }
@@ -188,6 +187,91 @@ app.delete("/api/books/:id", (req, res) => {
     return res.status(200).json({
       message: "deleted book successfully",
     });
+  });
+});
+
+// ======== CATEGORY ENDPOINTS ========
+
+app.post("/api/categories", (req, res) => {
+  const { name, description } = req.body;
+  
+  if (!name) {
+    return res.status(400).json({ message: "category name is required" });
+  }
+
+  const query = `INSERT INTO categories (name, description) VALUES(?,?)`;
+  db.run(query, [name, description || ""], (err) => {
+    if (err) {
+      if (err.message.includes("UNIQUE")) {
+        return res.status(400).json({ message: "category already exists" });
+      }
+      return res.status(500).json({ message: "error creating category" });
+    }
+    return res.status(201).json({ message: "category created successfully" });
+  });
+});
+
+app.get("/api/categories", (req, res) => {
+  const query = `SELECT * FROM categories`;
+  db.all(query, [], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ message: "error fetching categories" });
+    }
+    return res.status(200).json(rows || []);
+  });
+});
+
+app.get("/api/categories/:id", (req, res) => {
+  const { id } = req.params;
+  const query = `SELECT * FROM categories WHERE id=?`;
+  db.get(query, [id], (err, row) => {
+    if (err) {
+      return res.status(500).json({ message: "error fetching category" });
+    }
+    return res.status(200).json(row);
+  });
+});
+
+app.put("/api/categories/:id", (req, res) => {
+  const { name, description } = req.body;
+  const { id } = req.params;
+
+  if (!name) {
+    return res.status(400).json({ message: "category name is required" });
+  }
+
+  const query = `UPDATE categories SET name=?, description=? WHERE id=?`;
+  db.run(query, [name, description || "", id], (err) => {
+    if (err) {
+      if (err.message.includes("UNIQUE")) {
+        return res.status(400).json({ message: "category name already exists" });
+      }
+      return res.status(500).json({ message: "error updating category" });
+    }
+    return res.status(200).json({ message: "category updated successfully" });
+  });
+});
+
+app.delete("/api/categories/:id", (req, res) => {
+  const { id } = req.params;
+
+  const query = `DELETE FROM categories WHERE id = ?`;
+  db.run(query, [id], (err) => {
+    if (err) {
+      return res.status(500).json({ message: "error deleting category" });
+    }
+    return res.status(200).json({ message: "category deleted successfully" });
+  });
+});
+
+app.get("/api/categories/:categoryId/books", (req, res) => {
+  const { categoryId } = req.params;
+  const query = `SELECT * FROM books WHERE categoryId=?`;
+  db.all(query, [categoryId], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ message: "error fetching books" });
+    }
+    return res.status(200).json(rows || []);
   });
 });
 

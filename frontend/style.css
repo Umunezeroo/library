@@ -178,6 +178,64 @@ body {
     position: relative;
 }
 
+/* ===================== CATEGORY SECTION ===================== */
+.category {
+    width: 200px;
+    height: 100%;
+    background-color: var(--bg-white);
+    padding: 24px 12px;
+    overflow-y: auto;
+    border-right: 2px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.category-item {
+    padding: 16px 12px;
+    background-color: var(--bg-light);
+    border-radius: 12px;
+    border: 2px solid var(--border-color);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.category-item:hover {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.category-item:hover svg {
+    color: white;
+}
+
+.category-item svg {
+    width: 28px;
+    height: 28px;
+    color: var(--primary-color);
+    transition: var(--transition);
+}
+
+.category-item p {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-transform: capitalize;
+    text-align: center;
+    word-wrap: break-word;
+    transition: var(--transition);
+}
+
+.category-item:hover p {
+    color: white;
+}
+
 /* ===================== SIDEBAR ===================== */
 .sidebar {
     width: 260px;
@@ -456,22 +514,99 @@ text-transform: capitalize;
 .user-btn{
     width: 200px;
     background-color: white;
-    border: 1px solid green;
+    border: 2px solid var(--primary-color);
     display: none;
+    flex-direction: column;
     border-radius: 10px;
-    justify-content: center;
-    height: 100px;
-    top: 0px;
+    padding: 12px;
+    height: auto;
+    top: 70px;
     cursor:pointer;
-    right: 2px;
+    right: 20px;
     position: absolute;
+    z-index: 1000;
+    box-shadow: var(--shadow-md);
 }
 
-.log-out{
-    display: flex;
-    background-color: red;
-    padding: 8px 12px;
+#signOutBtn {
+    width: 100%;
+    background-color: #dc3545;
+    padding: 10px 12px;
     color: white;
     cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 15px;
+    transition: var(--transition);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
 
+#signOutBtn:hover {
+    background-color: #bb2d3b;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+#signOutBtn:active {
+    transform: translateY(0);
+}
+
+/* ===================== CATEGORY SECTION ===================== */
+.category {
+    width: 260px;
+    height: 100%;
+    background-color: var(--bg-white);
+    padding: 24px 12px;
+    overflow-y: auto;
+    border-right: 2px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.category-item {
+    padding: 16px 12px;
+    background-color: var(--bg-light);
+    border-radius: 12px;
+    border: 2px solid var(--border-color);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.category-item:hover {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.category-item:hover svg {
+    color: white;
+}
+
+.category-item svg {
+    width: 28px;
+    height: 28px;
+    color: var(--primary-color);
+    transition: var(--transition);
+}
+
+.category-item p {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-transform: capitalize;
+    text-align: center;
+    word-wrap: break-word;
+    transition: var(--transition);
+}
+
+.category-item:hover p {
+    color: white;
 }

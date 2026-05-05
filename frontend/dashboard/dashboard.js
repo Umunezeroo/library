@@ -9,7 +9,13 @@ const bookTable = document.getElementById("book-table");
 const tableBody = document.getElementById("table-body");
 const emptyState = document.getElementById("empty-state");
 
-
+// Category Management Elements
+const categoryModal = document.getElementById("category-modal");
+const manageCategoriesBtn = document.getElementById("manage-categories-btn");
+const closeCategoryModalBtn = document.getElementById("close-category-modal");
+const addCategoryForm = document.getElementById("add-category-form");
+const categoriesContainer = document.getElementById("categories-container");
+const categorySelect = document.getElementById("category");
 
 //show empty state
 function showEmptyState() {
@@ -21,6 +27,112 @@ function hideEmptyState() {
   emptyState.classList.remove("show");
   bookTable.style.display = "table";
 }
+
+// ===== CATEGORY MANAGEMENT =====
+async function loadCategories() {
+  try {
+    const response = await fetch(`${API_BASE}/categories`);
+    const categories = await response.json();
+    
+    // Populate category dropdown
+    categorySelect.innerHTML = '<option value="">Select a category</option>';
+    categories.forEach(cat => {
+      const option = document.createElement('option');
+      option.value = cat.id;
+      option.textContent = cat.name;
+      categorySelect.appendChild(option);
+    });
+    
+    // Display categories in category manager
+    displayCategories(categories);
+  } catch (error) {
+    console.error('Error loading categories:', error);
+  }
+}
+
+function displayCategories(categories) {
+  categoriesContainer.innerHTML = '';
+  
+  if (categories.length === 0) {
+    categoriesContainer.innerHTML = '<p>No categories yet. Add one below!</p>';
+    return;
+  }
+  
+  categories.forEach(category => {
+    const categoryItem = document.createElement('div');
+    categoryItem.style.cssText = 'border: 1px solid #ddd; padding: 12px; margin: 8px 0; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;';
+    categoryItem.innerHTML = `
+      <div>
+        <h4 style="margin: 0;">${category.name}</h4>
+        <p style="margin: 4px 0; color: #666; font-size: 14px;">${category.description || 'No description'}</p>
+      </div>
+      <button type="button" onclick="deleteCategory(${category.id})" style="background-color: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">Delete</button>
+    `;
+    categoriesContainer.appendChild(categoryItem);
+  });
+}
+
+async function handleAddCategory(e) {
+  e.preventDefault();
+  
+  const name = document.getElementById('category-name').value;
+  const description = document.getElementById('category-description').value;
+  
+  try {
+    const response = await fetch(`${API_BASE}/categories`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, description }),
+    });
+    
+    const result = await response.json();
+    
+    if (response.ok) {
+      addCategoryForm.reset();
+      loadCategories();
+      alert('Category added successfully!');
+    } else {
+      alert(result.message || 'Error adding category');
+    }
+  } catch (error) {
+    console.error('Error adding category:', error);
+    alert('Error adding category');
+  }
+}
+
+async function deleteCategory(categoryId) {
+  if (!confirm('Are you sure you want to delete this category?')) return;
+  
+  try {
+    const response = await fetch(`${API_BASE}/categories/${categoryId}`, {
+      method: 'DELETE',
+    });
+    
+    if (response.ok) {
+      loadCategories();
+      alert('Category deleted successfully!');
+    } else {
+      alert('Error deleting category');
+    }
+  } catch (error) {
+    console.error('Error deleting category:', error);
+    alert('Error deleting category');
+  }
+}
+
+// Event listeners for category management
+manageCategoriesBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  categoryModal.style.display = 'flex';
+});
+
+closeCategoryModalBtn.addEventListener('click', () => {
+  categoryModal.style.display = 'none';
+});
+
+addCategoryForm.addEventListener('submit', handleAddCategory);
+
+// ===== BOOK MANAGEMENT =====
 
 // submit books
 async function handleBookSubmit(e) {
@@ -37,6 +149,7 @@ async function handleBookSubmit(e) {
   const descInput = document.getElementById("description").value;
   const authorInput = document.getElementById("author").value;
   const priceInput = document.getElementById("price").value;
+  const categoryInput = document.getElementById("category").value;
   const imageInput = document.getElementById("image");
 
   const file = imageInput.files[0];
@@ -77,6 +190,7 @@ async function handleBookSubmit(e) {
           author: authorInput,
           price: priceInput,
           imageSrc, // Base64 data URL
+          categoryId: categoryInput ? parseInt(categoryInput) : null,
         }),
       });
       
@@ -267,4 +381,7 @@ closeBtn.addEventListener("click", () => {
 // Handle form submission
 saveBookBtn.addEventListener("click", handleBookSubmit);
 
-document.addEventListener("DOMContentLoaded", loadBooks);
+document.addEventListener("DOMContentLoaded", () => {
+  loadBooks();
+  loadCategories();
+});
