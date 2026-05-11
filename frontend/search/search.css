@@ -1,0 +1,131 @@
+/* Search page specific styles */
+
+.search-container {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    padding: 24px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-md);
+}
+
+.search-query {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.results-count {
+    opacity: 0.9;
+    font-size: 14px;
+}
+
+.search-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+    padding: 20px 0;
+}
+
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-light);
+}
+
+.no-results p {
+    font-size: 16px;
+    margin: 0;
+}
+
+#ai-suggestions-area {
+    animation: slideIn 0.3s ease-out;
+}
+
+#ai-suggestions-area.hidden {
+    display: none;
+}
+
+.ai-suggestions {
+    background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+    border-left: 4px solid var(--accent-color);
+    padding: 24px;
+    margin: 0;
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+}
+
+.ai-suggestions h3 {
+    color: var(--primary-color);
+    margin: 0 0 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+}
+
+.suggested-books {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+}
+
+.book-element {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.book-element:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.loading {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-light);
+}
+
+.loading span {
+    display: block;
+    margin-bottom: 12px;
+}
+
+.ai-loading-spinner {
+    display: inline-block;
+    animation: spin 1s linear infinite;
+    font-size: 24px;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .search-results,
+    .suggested-books {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 16px;
+    }
+
+    .search-query {
+        font-size: 20px;
+    }
+
+    .search-container {
+        padding: 16px;
+    }
+}
